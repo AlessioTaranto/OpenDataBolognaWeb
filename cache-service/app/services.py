@@ -1,6 +1,5 @@
 import aiohttp
-import os
-import redis_client
+from redis_client import redis_client  # Import the redis_client from your module
 
 API_URL = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets"
 
