@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from .models.dataset_models import DatasetResponse
-from .models.precipitaion_model import WeeklyPrecipitationResponse
+from .models.precipitation_model import WeeklyPrecipitationResponse
 from .services.dataset_service import get_dataset
 from .services.precipitation_service import get_weekly_precipitation
 from datetime import datetime

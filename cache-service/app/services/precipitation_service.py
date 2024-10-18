@@ -1,9 +1,9 @@
 import aiohttp
 import json
 from datetime import datetime
-from utils.redis_client import redis_client
-from ..models.precipitaion_model import PrecipitationResponse, WeeklyPrecipitationResponse
-from utils.date_utils import get_week_range
+from ..utils import redis_client
+from ..models.precipitation_model import PrecipitationResponse, WeeklyPrecipitationResponse
+from ..utils.date_utils import get_week_range
 
 PRECIPITATION_API_URL = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/precipitazioni_bologna/records"
 
