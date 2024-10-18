@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@fluentui/react": "^8.121.6",
-    "leaflet": "^1.9.4",
-    "react-leaflet": "^4.2.1"
-  }
-}
