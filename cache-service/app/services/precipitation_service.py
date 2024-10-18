@@ -1,6 +1,6 @@
 import aiohttp
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from utils.redis_client import redis_client
 from ..models.precipitaion_model import PrecipitationResponse, WeeklyPrecipitationResponse
 from utils.date_utils import get_week_range

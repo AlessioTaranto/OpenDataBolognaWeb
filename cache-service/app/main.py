@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from .models.dataset_models import Dataset
+from .models.dataset_models import DatasetResponse
 from .models.precipitaion_model import WeeklyPrecipitationResponse
 from .services.dataset_service import get_dataset
 from .services.precipitation_service import get_weekly_precipitation
@@ -7,7 +7,7 @@ from datetime import datetime
 
 app = FastAPI()
 
-@app.get("/dataset", response_model=Dataset)
+@app.get("/dataset", response_model=DatasetResponse)
 async def get_bologna_dataset():
     """
     Endpoint to fetch and return the Bologna precipitation dataset.
@@ -32,3 +32,4 @@ async def get_weekly_precipitation_data(date: str):
         raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    

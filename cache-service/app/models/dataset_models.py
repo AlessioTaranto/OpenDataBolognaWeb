@@ -81,7 +81,7 @@ class Metas(BaseModel):
     dcat_ap_it: DCATAPIT
     default: Default
 
-class Dataset(BaseModel):
+class DatasetResponse(BaseModel):
     visibility: str
     dataset_id: str
     dataset_uid: str

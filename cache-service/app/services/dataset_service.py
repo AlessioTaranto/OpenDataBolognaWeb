@@ -1,5 +1,5 @@
 import aiohttp
-from redis_client import redis_client
+from utils.redis_client import redis_client
 import json
 from models import Dataset
 
