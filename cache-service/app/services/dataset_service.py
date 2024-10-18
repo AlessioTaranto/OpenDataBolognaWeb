@@ -42,7 +42,7 @@ async def get_dataset() -> DatasetResponse:
     dataset = await fetch_dataset_from_api()
 
     # Cache the data for 1 hour (3600 seconds)
-    redis_client.setex(cache_key, 3600, json.dumps(dataset.dict()))
+    redis_client.setex(cache_key, 3600, json.dumps(dataset.model_dump()))
     
     # Return the dataset
     return dataset

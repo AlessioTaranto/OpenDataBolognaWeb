@@ -1,17 +1,12 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import date
 
 class PrecipitationRecord(BaseModel):
-    date: date
+    date: str
     avg_184_d: float
     stagione: str
 
 class PrecipitationResponse(BaseModel):
     total_count: int
     results: List[PrecipitationRecord]
-
-class WeeklyPrecipitationResponse(BaseModel):
-    week_start: date
-    week_end: date
-    records: List[PrecipitationRecord]

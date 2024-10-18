@@ -2,7 +2,7 @@ import aiohttp
 import json
 from datetime import datetime
 from ..utils.redis_client import redis_client
-from ..models.precipitation_model import PrecipitationResponse, WeeklyPrecipitationResponse
+from ..models.precipitation_model import PrecipitationResponse
 from ..utils.date_utils import get_week_range
 
 PRECIPITATION_API_URL = "https://opendata.comune.bologna.it/api/explore/v2.1/catalog/datasets/precipitazioni_bologna/records"
@@ -31,12 +31,13 @@ async def fetch_precipitation_data(start_date: datetime, end_date: datetime) -> 
             if response.status == 200:
                 # Parse the JSON response and validate it with the Pydantic model
                 data = await response.json()
+                print("API Response:", data)  # Log the raw API response
                 return PrecipitationResponse(**data)
             else:
                 # Raise an exception if the request fails
                 raise Exception("Failed to fetch precipitation data")
 
-async def get_weekly_precipitation(date: datetime) -> WeeklyPrecipitationResponse:
+async def get_weekly_precipitation(date: datetime) -> PrecipitationResponse:
     """
     Retrieves weekly precipitation data, either from the cache or by fetching it.
     
@@ -52,18 +53,13 @@ async def get_weekly_precipitation(date: datetime) -> WeeklyPrecipitationRespons
     cached_data = redis_client.get(cache_key)
     if cached_data:
         # If the data is cached, return it as a Pydantic model
-        return WeeklyPrecipitationResponse(**json.loads(cached_data))
+        return PrecipitationResponse(**json.loads(cached_data))
     
     # Fetch data from the API if not cached
     precipitation_data = await fetch_precipitation_data(week_start, week_end)
-    
-    weekly_response = WeeklyPrecipitationResponse(
-        week_start=week_start,
-        week_end=week_end,
-        records=precipitation_data.results
-    )
 
     # Cache the result for 24 hours (86400 seconds)
-    redis_client.setex(cache_key, 86400, json.dumps(weekly_response.dict()))
+    redis_client.setex(cache_key, 86400, json.dumps(precipitation_data.model_dump()))
 
-    return weekly_response
+    return precipitation_data
+

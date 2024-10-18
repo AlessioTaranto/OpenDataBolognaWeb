@@ -1,4 +1,4 @@
-import redis_client
+from .utils.redis_client import redis_client
 
 async def cache_middleware(cache_key: str, fetch_function):
     """

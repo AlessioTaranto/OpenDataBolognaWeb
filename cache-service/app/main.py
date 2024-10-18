@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from .models.dataset_models import DatasetResponse
-from .models.precipitation_model import WeeklyPrecipitationResponse
+from .models.precipitation_model import PrecipitationResponse
 from .services.dataset_service import get_dataset
 from .services.precipitation_service import get_weekly_precipitation
 from datetime import datetime
@@ -27,7 +27,7 @@ async def get_bologna_dataset() -> DatasetResponse:
         raise HTTPException(status_code=500, detail=str(e))
     
 
-@app.get("/precipitation", response_model=WeeklyPrecipitationResponse)
+@app.get("/precipitation", response_model=PrecipitationResponse)
 async def get_weekly_precipitation_data(date: str):
     """
     Endpoint to fetch weekly precipitation data.
@@ -38,6 +38,7 @@ async def get_weekly_precipitation_data(date: str):
     :rtype: WeeklyPrecipitationResponse
     """
     try:
+        print("Fetching weekly precipitation data for " + date)
         # Convert the date from a string to a datetime object
         start_date = datetime.strptime(date, "%Y-%m-%d")
 
@@ -45,11 +46,13 @@ async def get_weekly_precipitation_data(date: str):
         precipitation_data = await get_weekly_precipitation(start_date)
 
         # Return the fetched data
-        return precipitation_data
-    except ValueError:
-        # Raise an error if the date format is invalid
-        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+        print("Fetched data: " + str(precipitation_data))
+        return precipitation_data.model_dump()
+    except ValueError as e:
+        print("Error: " + str(e))
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
+        print("Error: " + str(e))
         # Raise an error if any other exception occurs
         raise HTTPException(status_code=500, detail=str(e))
     
