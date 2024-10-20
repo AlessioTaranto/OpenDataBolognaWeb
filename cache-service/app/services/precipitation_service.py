@@ -16,6 +16,7 @@ async def fetch_precipitation_data(start_date: datetime, end_date: datetime) -> 
     :return: A PrecipitationResponse model containing the fetched data.
     :raises Exception: If the API request fails.
     """
+    print("Fetching precipitation data for", start_date, "to", end_date)
     params = {
         'where': f"date >= '{start_date}' AND date <= '{end_date}'",  # Set the date range for the query
         'limit': 100,  # Limit the number of records fetched
@@ -35,7 +36,7 @@ async def fetch_precipitation_data(start_date: datetime, end_date: datetime) -> 
                 return PrecipitationResponse(**data)
             else:
                 # Raise an exception if the request fails
-                raise Exception("Failed to fetch precipitation data")
+                raise Exception("Failed to fetch precipitation data", response.status)
 
 async def get_weekly_precipitation(date: datetime) -> PrecipitationResponse:
     """

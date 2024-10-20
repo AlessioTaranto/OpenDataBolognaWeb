@@ -42,11 +42,12 @@ async def get_weekly_precipitation_data(date: str):
         # Convert the date from a string to a datetime object
         start_date = datetime.strptime(date, "%Y-%m-%d")
 
+        print("Fetching weekly precipitation data for week starting " + str(start_date))
         # Fetch the weekly precipitation data
         precipitation_data = await get_weekly_precipitation(start_date)
 
-        # Return the fetched data
         print("Fetched data: " + str(precipitation_data))
+        # Return the fetched data
         return precipitation_data.model_dump()
     except ValueError as e:
         print("Error: " + str(e))

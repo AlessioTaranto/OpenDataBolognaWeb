@@ -11,14 +11,18 @@ async def fetch_dataset_from_api() -> DatasetResponse:
 
     :return DatasetResponse: A Pydantic model representing the dataset.
     """
+    print("Fetching dataset from API")
     async with aiohttp.ClientSession() as session:
         async with session.get(API_URL) as response:
+            print(f"API response status code: {response.status}")
             if response.status == 200:
                 data = await response.json()
+                print("API response data:", data)
                 # Validate the response using the Pydantic model
                 return DatasetResponse(**data)
             else:
                 # Raise an exception if the request fails
+                print("Failed to fetch dataset from API")
                 raise Exception("Failed to fetch dataset")
 
 async def get_dataset() -> DatasetResponse:
