@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from .models.dataset_models import DatasetResponse
 from .models.precipitation_model import PrecipitationResponse
 from .services.dataset_service import get_dataset
@@ -6,6 +7,14 @@ from .services.precipitation_service import get_weekly_precipitation
 from datetime import datetime
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Allow the frontend to access the backend
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 @app.get("/dataset", response_model=DatasetResponse)
 async def get_bologna_dataset() -> DatasetResponse:
