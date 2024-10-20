@@ -47,20 +47,27 @@ async def get_weekly_precipitation(date: datetime) -> PrecipitationResponse:
     
     Finally, it caches the result for 24 hours (86400 seconds) in Redis.
     """
+    print(f"Calculating week range for date: {date}")
     week_start, week_end = get_week_range(date)
+    print(f"Week start: {week_start}, Week end: {week_end}")
+
     cache_key = f"precipitation_data_{week_start}_{week_end}"
+    print(f"Checking cache for key: {cache_key}")
     
     # Check if the data is cached
     cached_data = redis_client.get(cache_key)
     if cached_data:
+        print("Found cached data")
         # If the data is cached, return it as a Pydantic model
         return PrecipitationResponse(**json.loads(cached_data))
     
+    print("Cache miss, fetching data from API")
     # Fetch data from the API if not cached
     precipitation_data = await fetch_precipitation_data(week_start, week_end)
+    print(f"Fetched data: {precipitation_data}")
 
     # Cache the result for 24 hours (86400 seconds)
     redis_client.setex(cache_key, 86400, json.dumps(precipitation_data.model_dump()))
+    print(f"Data cached with key: {cache_key} for 24 hours")
 
     return precipitation_data
-
